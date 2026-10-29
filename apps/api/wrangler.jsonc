@@ -14,8 +14,7 @@
     {
       "binding": "DB",
       "database_name": "camp",
-      // Replace with the id printed by: npx wrangler d1 create camp
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "8d01c33c-e5c7-4187-afd3-726c82b7adc9",
       "migrations_dir": "migrations"
     }
   ],

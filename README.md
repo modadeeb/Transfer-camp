@@ -102,3 +102,14 @@ npx wrangler secret put FCM_SERVICE_ACCOUNT < service-account.json
 - حماية من CSRF عبر الترويسة `X-Requested-With`.
 - قفل الدخول بعد 5 محاولات خاطئة للمستخدم أو 30 للعنوان الواحد خلال 15 دقيقة.
 - تصدير بياناتك الشخصية من **الإعدادات ← البيانات**.
+
+## النشر التلقائي (GitHub Actions)
+
+كل دفع إلى `main` يُشغّل `.github/workflows/deploy.yml`. هذا الـworkflow:
+1. يشغّل الاختبارات.
+2. يبني الواجهة.
+3. يطبّق migrations على D1.
+4. ينشر الـWorker.
+5. يولّد `JWT_SECRET` تلقائياً في أول مرة.
+
+يحتاج سراً واحداً في المستودع هو `CLOUDFLARE_API_TOKEN`، بصلاحيات: Workers Scripts: Edit، وD1: Edit، وAccount Settings: Read.
