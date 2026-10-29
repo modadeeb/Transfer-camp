@@ -1,5 +1,5 @@
 // Runs every 15 minutes (wrangler cron "*/15 * * * *"). Each job guards itself so repeats are harmless.
-import { addDays, adenDate, adenTime, adenToInstant, dayOfWeek, formatMoney, formatTime, weekStartOf } from '@camp/domain';
+import { TASKS, addDays, adenDate, adenTime, adenToInstant, count, dayOfWeek, formatMoney, formatTime, weekStartOf } from '@camp/domain';
 import { all, first, getSetting, nowIso, run, setSetting } from './lib/db.js';
 import { notify } from './lib/notify.js';
 import { managerIds, taskLink } from './lib/tasks.js';
@@ -100,8 +100,8 @@ export async function morningSummary(ctx, now) {
   const pending = await first(db, "SELECT COUNT(*) AS n FROM tasks WHERE status = 'submitted' AND deleted_at IS NULL AND kind != 'personal'");
   if (overdueCount.n || pending.n) {
     const parts = [];
-    if (pending.n) parts.push(`${pending.n} بانتظار الاعتماد`);
-    if (overdueCount.n) parts.push(`${overdueCount.n} متأخرة`);
+    if (pending.n) parts.push(`${count(pending.n, TASKS)} بانتظار الاعتماد`);
+    if (overdueCount.n) parts.push(`${count(overdueCount.n, TASKS)} متأخرة`);
     await notify(ctx, await managerIds(db), { type: 'overdue_summary', title: 'ملخص المهام', body: parts.join(' · '), link: '/work?tab=manage' });
   }
 }

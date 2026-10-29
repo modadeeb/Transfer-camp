@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { addDays, formatDate, generateDistribution, isDate, settleBalances, weekStartOf } from '@camp/domain';
+import { TASKS, addDays, count, formatDate, generateDistribution, isDate, settleBalances, weekStartOf } from '@camp/domain';
 import { assertManager } from '../lib/auth.js';
 import { all, batch, camel, camelAll, first, inList, logActivity, nowIso, run } from '../lib/db.js';
 import { badRequest, conflict, notFound, parseId, readJson } from '../lib/http.js';
@@ -381,7 +381,7 @@ housing.post('/distributions/:weekStart/publish', async (c) => {
     await notify(ctx, [s.userId], {
       type: 'distribution',
       title: 'نُشر توزيع مهام السكن',
-      body: `أسبوع ${formatDate(weekStart)}: لديك ${mine.length} مهام (${s.assigned} نقطة)`,
+      body: `أسبوع ${formatDate(weekStart)}: لديك ${count(mine.length, TASKS)} (${s.assigned} نقطة)`,
       link: `/housing?week=${weekStart}`,
     });
   }

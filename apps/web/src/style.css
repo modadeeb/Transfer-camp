@@ -1,0 +1,193 @@
+@import '@fontsource/ibm-plex-sans-arabic/400.css';
+@import '@fontsource/ibm-plex-sans-arabic/500.css';
+@import '@fontsource/ibm-plex-sans-arabic/600.css';
+@import '@fontsource/ibm-plex-sans-arabic/700.css';
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Palette from the Hayati identity. Semantic names so dark mode only swaps values. */
+:root {
+  --bg: #f7f6f1;
+  --sunken: #efeee7;
+  --card: #ffffff;
+  --ink: #252a27;
+  --muted: #777e78;
+  --line: #e7e9e3;
+  --forest: #243f35;
+  --sage: #56856a;
+  --sage-soft: #e7efe9;
+  --brass: #b68a47;
+  --brass-soft: #f5ede0;
+  --danger: #a9483a;
+  --danger-soft: #f7e8e4;
+  --primary: #243f35;
+  --primary-hover: #1b3129;
+  --on-primary: #f7f6f1;
+  --link: #243f35;
+  --focus: #b68a47;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #121715;
+  --sunken: #0d110f;
+  --card: #1a211e;
+  --ink: #e8ebe7;
+  --muted: #9aa49d;
+  --line: #2a332f;
+  --forest: #9cc5b0;
+  --sage: #7fb096;
+  --sage-soft: #1f2d26;
+  --brass: #d3a865;
+  --brass-soft: #2e271b;
+  --danger: #e08a7b;
+  --danger-soft: #34201c;
+  --primary: #3d7560;
+  --primary-hover: #468670;
+  --on-primary: #ffffff;
+  --link: #9cc5b0;
+  --focus: #d3a865;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --color-bg: var(--bg);
+  --color-sunken: var(--sunken);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-forest: var(--forest);
+  --color-sage: var(--sage);
+  --color-sage-soft: var(--sage-soft);
+  --color-brass: var(--brass);
+  --color-brass-soft: var(--brass-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-link: var(--link);
+  --radius-section: 16px;
+  --radius-row: 10px;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Numbers line up in tables and summaries. */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@layer base {
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* Native date/time inputs keep LTR digits inside an RTL layout. */
+  input[type='date'],
+  input[type='time'],
+  input[type='month'] {
+    direction: ltr;
+    text-align: right;
+  }
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer components {
+  .input {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: var(--radius-row);
+    padding: 0.6rem 0.75rem;
+    min-height: 2.75rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .input:focus {
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px var(--sage-soft);
+  }
+  .input[aria-invalid='true'] {
+    border-color: var(--danger);
+  }
+  textarea.input {
+    min-height: 5.5rem;
+    resize: vertical;
+  }
+  select.input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23777E78' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-position: left 0.7rem center;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    padding-left: 2.1rem;
+  }
+  .section {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-section);
+  }
+  .row {
+    border-radius: var(--radius-row);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 12.5px;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+}

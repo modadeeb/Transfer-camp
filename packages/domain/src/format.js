@@ -36,3 +36,15 @@ export function formatDuration(minutes) {
   if (!h) return `${m} د`;
   return m ? `${h} س ${m} د` : `${h} س`;
 }
+
+/** Arabic number agreement: count(1, TASKS) → «مهمة واحدة», 2 → «مهمتان», 5 → «5 مهام», 12 → «12 مهمة». */
+export function count(n, [one, two, few, many]) {
+  if (n === 1) return one;
+  if (n === 2) return two;
+  if (n >= 3 && n <= 10) return `${n} ${few}`;
+  return `${n} ${many}`;
+}
+export const TASKS = ['مهمة واحدة', 'مهمتان', 'مهام', 'مهمة'];
+export const ITEMS = ['بند واحد', 'بندان', 'بنود', 'بنداً'];
+export const POINTS = ['نقطة واحدة', 'نقطتان', 'نقاط', 'نقطة'];
+export const HOURS = ['ساعة واحدة', 'ساعتان', 'ساعات', 'ساعة'];
