@@ -103,13 +103,12 @@ npx wrangler secret put FCM_SERVICE_ACCOUNT < service-account.json
 - قفل الدخول بعد 5 محاولات خاطئة للمستخدم أو 30 للعنوان الواحد خلال 15 دقيقة.
 - تصدير بياناتك الشخصية من **الإعدادات ← البيانات**.
 
-## النشر التلقائي (GitHub Actions)
+## النشر التلقائي (Cloudflare Workers Builds)
 
-كل دفع إلى `main` يُشغّل `.github/workflows/deploy.yml`. هذا الـworkflow:
-1. يشغّل الاختبارات.
-2. يبني الواجهة.
-3. يطبّق migrations على D1.
-4. ينشر الـWorker.
-5. يولّد `JWT_SECRET` تلقائياً في أول مرة.
+المستودع مربوط بـCloudflare، وكل دفع إلى `main` يُبنى ويُنشر تلقائياً بهذه الإعدادات:
+- **Build command:** `npm run build`
+- **Deploy command:** `npx wrangler deploy --config apps/api/wrangler.jsonc`
+- **Path:** `/`
 
-يحتاج سراً واحداً في المستودع هو `CLOUDFLARE_API_TOKEN`، بصلاحيات: Workers Scripts: Edit، وD1: Edit، وAccount Settings: Read.
+الأسرار (`JWT_SECRET` وأسرار Firebase) تُضاف من **إعدادات ← متغيرات وقت التشغيل والأسرار**، وليس من متغيرات البناء.
+أي migration جديد يُطبَّق يدوياً: `npm run db:migrate:remote -w apps/api`.
