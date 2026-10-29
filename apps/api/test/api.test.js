@@ -432,3 +432,13 @@ describe('scheduled jobs', () => {
     expect((await runScheduled(env, at)).draft).toBe(false);
   });
 });
+
+describe('push test', () => {
+  it('stores an in-app test notification and reports Firebase not configured', async () => {
+    const r = await camp.manager.post('/push/test', {});
+    expect(r.status).toBe(200);
+    expect(r.body).toMatchObject({ configured: false, devices: 0, sent: 0 });
+    const notes = await notificationsOf(camp.manager);
+    expect(notes.some((n) => n.type === 'test')).toBe(true);
+  });
+});

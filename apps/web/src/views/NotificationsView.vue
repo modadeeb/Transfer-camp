@@ -42,7 +42,7 @@ async function remove(n) {
           <button type="button" class="min-w-0 flex-1 text-start" @click="openItem(n)">
             <p class="font-medium">{{ n.title }}<span v-if="!n.readAt" class="sr-only"> (جديد)</span></p>
             <p v-if="n.body" class="text-[14px] text-muted">{{ n.body }}</p>
-            <p class="mt-0.5 text-[12.5px] text-muted">{{ store.types[n.type] || '' }} · {{ timeAgo(n.createdAt) }}</p>
+            <p class="mt-0.5 text-[12.5px] text-muted">{{ [store.types[n.type], timeAgo(n.createdAt)].filter(Boolean).join(' · ') }}</p>
           </button>
           <button type="button" class="grid size-8 shrink-0 place-items-center rounded-full text-muted hover:text-danger" aria-label="حذف الإشعار" @click="remove(n)"><Trash2 class="size-4" /></button>
         </li>

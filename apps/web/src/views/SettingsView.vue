@@ -79,6 +79,22 @@ async function togglePush() {
     pushBusy.value = false;
   }
 }
+const testing = ref(false);
+async function sendTest() {
+  testing.value = true;
+  try {
+    const r = await post('/push/test');
+    notifications.load?.();
+    if (!r.configured) ui.toast('وصل الإشعار إلى الجرس 🔔 — إشعارات الجوال تحتاج إكمال إعداد Firebase');
+    else if (!r.devices) ui.toast('وصل الإشعار إلى الجرس 🔔 — فعّل الإشعارات على هذا الجهاز أولاً');
+    else if (r.sent) ui.toast(`أُرسل إلى ${r.sent === 1 ? 'جهاز واحد' : r.sent === 2 ? 'جهازين' : `${r.sent} أجهزة`} — يفترض أن يظهر خلال ثوانٍ`);
+    else ui.toast(r.error || 'تعذّر الإرسال', { type: 'error' });
+  } catch (e) {
+    ui.error(e);
+  } finally {
+    testing.value = false;
+  }
+}
 function toggleType(type) {
   const set = new Set(prefs.value.disabled);
   set.has(type) ? set.delete(type) : set.add(type);
@@ -188,6 +204,7 @@ async function logout() {
         <UButton v-if="['on', 'off', 'error'].includes(push)" class="mt-4" :variant="push === 'on' ? 'secondary' : 'primary'" :icon="BellRing" :loading="pushBusy" @click="togglePush">
           {{ push === 'on' ? 'إيقاف على هذا الجهاز' : 'تفعيل على هذا الجهاز' }}
         </UButton>
+        <UButton class="mt-3" variant="soft" :loading="testing" @click="sendTest">إرسال إشعار تجريبي</UButton>
         <p class="mt-4 text-[13px] text-muted">كل الإشعارات تبقى محفوظة في الجرس داخل التطبيق حتى لو أوقفتها هنا.</p>
       </SectionCard>
       <SectionCard title="ما يصلني">

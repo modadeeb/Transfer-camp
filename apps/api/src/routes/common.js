@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import { isManager } from '../lib/auth.js';
 import { all, batch, camelAll, first, inList, nowIso, run } from '../lib/db.js';
 import { badRequest, forbidden, notFound, parseId, readJson } from '../lib/http.js';
+import { fcmConfigured, sendPush } from '../lib/fcm.js';
 import { NOTIFICATION_TYPES } from '../lib/notify.js';
 import { parse, v } from '../lib/validate.js';
 
@@ -70,6 +71,28 @@ common.post('/devices', async (c) => {
     now,
   );
   return c.json({ ok: true });
+});
+
+// Sends a test notification to the caller only and reports what happened.
+common.post('/push/test', async (c) => {
+  const me = c.get('user');
+  const n = { title: 'إشعار تجريبي 🔔', body: 'إن رأيت هذا فالإشعارات تعمل', link: '/notifications' };
+  await run(c.env.DB, "INSERT INTO notifications (user_id, type, title, body, link, urgent, created_at) VALUES (?, 'test', ?, ?, ?, 0, ?)", me.id, n.title, n.body, n.link, nowIso());
+  const tokens = await all(c.env.DB, 'SELECT token FROM device_tokens WHERE user_id = ?', me.id);
+  if (!fcmConfigured(c.env)) return c.json({ configured: false, devices: tokens.length, sent: 0 });
+  let sent = 0;
+  let error = null;
+  for (const { token } of tokens) {
+    try {
+      const r = await sendPush(c.env, token, { ...n, tag: 'test' });
+      if (r === 'ok') sent += 1;
+      else if (r === 'invalid') await run(c.env.DB, 'DELETE FROM device_tokens WHERE token = ?', token);
+      else error = 'تعذّر الإرسال عبر Firebase';
+    } catch (e) {
+      error = e?.message || 'تعذّر الإرسال عبر Firebase';
+    }
+  }
+  return c.json({ configured: true, devices: tokens.length, sent, error });
 });
 
 common.post('/devices/remove', async (c) => {
