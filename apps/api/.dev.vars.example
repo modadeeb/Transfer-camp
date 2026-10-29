@@ -1,0 +1,7 @@
+# Copy to .dev.vars for local development (never commit .dev.vars).
+JWT_SECRET=change-me-to-a-long-random-string-at-least-32-chars
+
+# Optional — push notifications (see README "الإشعارات"):
+# FCM_SERVICE_ACCOUNT={"type":"service_account","project_id":"...","client_email":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"}
+# FIREBASE_WEB_CONFIG={"apiKey":"...","authDomain":"...","projectId":"...","messagingSenderId":"...","appId":"..."}
+# FIREBASE_VAPID_KEY=...

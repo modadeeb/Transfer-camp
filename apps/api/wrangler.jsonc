@@ -1,0 +1,28 @@
+{
+  // معسكر نقلة — one Worker serves the web app (static assets) and the API under /api.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "transfer-camp",
+  "main": "src/index.js",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": "../web/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "camp",
+      // Replace with the id printed by: npx wrangler d1 create camp
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "triggers": {
+    "crons": ["*/15 * * * *"]
+  },
+  "observability": {
+    "enabled": true
+  }
+}
