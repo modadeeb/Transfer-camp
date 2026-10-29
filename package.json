@@ -1,0 +1,22 @@
+{
+  "name": "transfer-camp",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "npm run test -w packages/domain && npm run test -w apps/api",
+    "build": "npm run build -w apps/web",
+    "db:migrate:local": "npm run db:migrate:local -w apps/api",
+    "dev": "npm run build && npm run dev -w apps/api",
+    "dev:web": "npm run dev -w apps/web",
+    "dev:api": "npm run dev -w apps/api",
+    "deploy": "npm run build && npm run deploy -w apps/api"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

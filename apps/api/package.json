@@ -1,0 +1,22 @@
+{
+  "name": "@camp/api",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "db:migrate:local": "wrangler d1 migrations apply camp --local",
+    "db:migrate:remote": "wrangler d1 migrations apply camp --remote",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@camp/domain": "1.0.0",
+    "hono": "4.13.14"
+  },
+  "devDependencies": {
+    "miniflare": "4.20260611.0",
+    "vitest": "3.2.7",
+    "wrangler": "4.100.0"
+  }
+}
