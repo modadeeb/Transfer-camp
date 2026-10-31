@@ -52,8 +52,21 @@ common.get('/push/config', async (c) => {
   } catch {
     firebase = null;
   }
-  const enabled = Boolean(firebase && c.env.FIREBASE_VAPID_KEY && c.env.FCM_SERVICE_ACCOUNT);
-  return c.json({ enabled, firebase: enabled ? firebase : null, vapidKey: enabled ? c.env.FIREBASE_VAPID_KEY : null });
+  let android = null;
+  try {
+    android = c.env.FIREBASE_ANDROID_CONFIG ? JSON.parse(c.env.FIREBASE_ANDROID_CONFIG) : null;
+  } catch {
+    android = null;
+  }
+  const server = Boolean(c.env.FCM_SERVICE_ACCOUNT);
+  const enabled = Boolean(server && firebase && c.env.FIREBASE_VAPID_KEY);
+  return c.json({
+    enabled: enabled || Boolean(server && android),
+    web: enabled,
+    firebase: enabled ? firebase : null,
+    vapidKey: enabled ? c.env.FIREBASE_VAPID_KEY : null,
+    android: server && android ? android : null,
+  });
 });
 
 common.post('/devices', async (c) => {

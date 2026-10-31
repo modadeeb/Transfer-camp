@@ -6,6 +6,7 @@ import { all, camelAll, first, getSetting } from '../lib/db.js';
 import { TASK_SELECT, serializeTask } from '../lib/tasks.js';
 import { budgetView } from './budget.js';
 import { activeMembers } from './members.js';
+import { prayerTimes } from '../lib/prayers.js';
 
 const overview = new Hono();
 
@@ -98,6 +99,7 @@ overview.get('/home', async (c) => {
     tasks: myTasks.map(serializeTask),
     events: camelAll(events),
     prayers,
+    prayerTimes: prayerTimes(today),
     swaps: camelAll(swaps),
     budget: budget.week ? { week: budget.week, summary: budget.summary } : null,
     contributionsDue,

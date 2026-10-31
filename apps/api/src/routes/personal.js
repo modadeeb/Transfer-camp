@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import { addDays, adenDate, currentStreak, isDate, sleepMinutes, weekDots, weekStartOf } from '@camp/domain';
 import { all, camel, camelAll, first, nowIso, run } from '../lib/db.js';
 import { badRequest, notFound, parseId, readJson } from '../lib/http.js';
+import { prayerTimes } from '../lib/prayers.js';
 import { parse, v } from '../lib/validate.js';
 
 const personal = new Hono();
@@ -19,7 +20,9 @@ function range(c) {
 personal.get('/me/prayers', async (c) => {
   const { from, to } = range(c);
   const rows = await all(c.env.DB, 'SELECT date, prayer FROM prayer_logs WHERE user_id = ? AND date BETWEEN ? AND ? ORDER BY date', c.get('user').id, from, to);
-  return c.json({ from, to, logs: rows });
+  const times = {};
+  for (let d = from; d <= to && Object.keys(times).length < 62; d = addDays(d, 1)) times[d] = prayerTimes(d);
+  return c.json({ from, to, logs: rows, times });
 });
 
 personal.put('/me/prayers', async (c) => {

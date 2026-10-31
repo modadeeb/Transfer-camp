@@ -63,6 +63,12 @@ export async function sendPush(env, token, { title, body, link, tag }) {
         token,
         data: { title: title || '', body: body || '', link: link || '/', tag: tag || '' },
         webpush: { headers: { Urgency: 'high', TTL: '86400' } },
+        // The Flutter app (Android) needs a notification block so the system shows it when the app is closed.
+        android: {
+          priority: 'high',
+          ttl: '86400s',
+          notification: { title: title || '', body: body || '', channel_id: 'camp', tag: tag || undefined, click_action: 'FLUTTER_NOTIFICATION_CLICK' },
+        },
       },
     }),
   });

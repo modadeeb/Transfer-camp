@@ -27,7 +27,7 @@ export function pushState() {
 export async function enablePush() {
   if (!pushSupported()) return isIos() && !isStandalone() ? 'install-first' : 'unsupported';
   const config = await get('/push/config');
-  if (!config.enabled) return 'not-configured';
+  if (!config.web) return 'not-configured';
   const permission = await Notification.requestPermission();
   if (permission !== 'granted') return 'denied';
   const registration = await navigator.serviceWorker.ready;

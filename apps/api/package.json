@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@camp/domain": "1.0.0",
+    "adhan": "4.4.6",
     "hono": "4.13.14"
   },
   "devDependencies": {
