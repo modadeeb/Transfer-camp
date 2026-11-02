@@ -316,7 +316,7 @@ class _Expenses extends StatelessWidget {
   Future<void> _edit(BuildContext context, [Map<String, dynamic>? e]) async {
     final session = context.read<Session>();
     final api = session.api;
-    final split = ((e?['splitMemberIds'] as List?) ?? session.members.where((m) => !m.archived).map((m) => m.id)).whereType<int>();
+    final split = ((e?['splitMemberIds'] as Iterable?) ?? session.members.where((m) => !m.archived).map((m) => m.id)).whereType<int>();
     final saved = await showFormSheet(
       context,
       title: e == null ? 'مصروف مشترك' : 'تعديل المصروف',
